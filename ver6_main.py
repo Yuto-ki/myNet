@@ -18,7 +18,7 @@ shape_data = [1, 20, 20, 1]
 activ_f_data = [2, 2, 0]
 net = Net(shape_data, activ_f_data, lr)
 
-epoch_num = 1000  # epoch数
+epoch_num = 10000  # epoch数
 batch_n = 10  # バッチサイズ
 
 # 入力データ生成

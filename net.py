@@ -5,6 +5,7 @@ from tanh import TanH
 from swish import Swish
 from softplus import SoftPlus
 from identity import Identity
+from softmax import SoftMax
 
 
 def init_w_type(x):
@@ -20,11 +21,13 @@ def init_w_type(x):
         return 1
     elif x == 5:
         return 1
+    elif x == 6:
+        return 0
 
 
 class Net:
     def __init__(self, shape_data, activ_f_type, lr):
-        # active_f_type: 活性化関数を指定(0:なし, 1:sigmoid, 2: ReLU, 3: tanH, 4: swish, 5: softPlus, 6: identity)
+        # active_f_type: 活性化関数を指定(0: identity, 1:sigmoid, 2: ReLU, 3: tanH, 4: swish, 5: softPlus, 6: softmax)
         # init_w_type: 重みの初期化方法を指定(0:Xavier, 1:He)
         self.layer = []
         self.lr = lr
@@ -43,6 +46,8 @@ class Net:
                 self.layer.append(Swish())
             elif activ_f_type[i] == 5:
                 self.layer.append(SoftPlus())
+            elif activ_f_type[i] == 6:
+                self.layer.append(SoftMax())
 
     def forward(self, inputs):
         a = inputs
