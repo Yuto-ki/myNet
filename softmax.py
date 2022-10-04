@@ -5,14 +5,12 @@ class SoftMax:
     def __init__(self):
         self.output = None
         self.input_size = None
-        self.input_max = None
         self.dh_du = None
 
     def forward(self, x):
         self.input_size = len(x)
-        print(self.input_size)
-        self.input_max = np.max(x)
-        self.output = np.exp(x - self.input_max) / np.sum(np.exp(x - self.input_max))
+        x = x - np.max(x)
+        self.output = np.exp(x) / np.sum(np.exp(x))
         return self.output
 
     def backward(self, dx):
