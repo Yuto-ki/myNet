@@ -6,10 +6,9 @@ import random
 import math
 from outputer import OutPutter
 from net import Net
-from cee import CEE
+from sce import SCE
 from sklearn.datasets import load_wine
 from sklearn.model_selection import train_test_split
-import pandas as pd
 
 
 def function(x):
@@ -19,7 +18,7 @@ def function(x):
 def oh_a(x):
     a = [0] * 3
     a[x] = 1
-    return a
+    return np.array([a]).T
 
 
 def oh(x):
@@ -31,11 +30,11 @@ def oh(x):
 
 lr = 0.1
 shape_data = [13, 20, 20, 3]
-activ_f_data = [2, 2, 6]
+activ_f_data = [2, 2, 0]
 net = Net(shape_data, activ_f_data, lr)
 
-epoch_num = 1  # epoch数
-batch_n = 10  # バッチサイズ
+epoch_num = 10000  # epoch数
+batch_n = 100  # バッチサイズ
 
 # 入力データ生成
 data_wine = load_wine()
@@ -44,7 +43,6 @@ Y = data_wine["target"]
 X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.3, random_state=0)
 y_train = oh(y_train)
 y_test = oh(y_test)
-print(y_train)
 
 n = 500  # データ数
 split_rate = 5  # データ数 / テストデータ数
@@ -97,24 +95,25 @@ lc_mse = []
 lc_x = []
 lc_validation = []
 
+sce = SCE()
 
 for i in range(1, epoch_num+1):
     lc_mse_x.append(i)
     loss = 0
     for j in range(0, batch_n):
         k = random.randint(0, train_n-1)
-        out = net.forward(X_train[k])
-        loss += CEE.forward(out, y_train[k]) / batch_n
-        print(CEE.backward(out, y_train[k]))
-        net.backward(CEE.backward(out, y_train[k]))
+        out = sce.cal_out(net.forward(X_train[k]))
+        # print(out)
+        loss += sce.cal_loss(y_train[k]) / batch_n
+        net.backward(sce.backward(y_train[k]))
     lc_mse.append(loss)
     net.update(batch_n)
 
     lc_x.append(i)
     loss_test = 0
     for k in range(0, test_n):
-        out = net.forward(data_test[k])
-        loss_test += CEE.forward(out, data_test_res[k]) / test_n
+        out = sce.cal_out(net.forward(X_test[k]))
+        loss_test += sce.cal_loss(y_test[k]) / test_n
     lc_validation.append(loss_test)
 
 

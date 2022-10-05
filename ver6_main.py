@@ -18,7 +18,7 @@ shape_data = [1, 20, 20, 1]
 activ_f_data = [2, 2, 0]
 net = Net(shape_data, activ_f_data, lr)
 
-epoch_num = 10000  # epoch数
+epoch_num = 100  # epoch数
 batch_n = 10  # バッチサイズ
 
 # 入力データ生成
@@ -78,6 +78,7 @@ for i in range(1, epoch_num+1):
     for j in range(0, batch_n):
         k = random.randint(0, train_n-1)
         out = net.forward(data_train[k])
+        print(out)
         loss += Mse.forward(out, data_train_res[k]) / batch_n
         net.backward(Mse.backward(out, data_train_res[k]))
     lc_mse.append(loss)
