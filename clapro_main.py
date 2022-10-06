@@ -29,56 +29,26 @@ def oh(x):
 
 
 lr = 0.1
-shape_data = [13, 20, 20, 3]
-activ_f_data = [2, 2, 0]
+shape_data = [2, 10, 10, 2]
+activ_f_data = [1, 1, 0]
 net = Net(shape_data, activ_f_data, lr)
 
-epoch_num = 10000  # epoch数
-batch_n = 100  # バッチサイズ
+epoch_num = 5000  # epoch数
+batch_n = 3  # バッチサイズ
 
 # 入力データ生成
-data_wine = load_wine()
-X = data_wine["data"]
-Y = data_wine["target"]
-X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.3, random_state=0)
-y_train = oh(y_train)
-y_test = oh(y_test)
+# data_wine = load_wine()
+# X = data_wine["data"]
+# Y = data_wine["target"]
+# X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.3, random_state=0)
+# y_train = oh(y_train)
+# y_test = oh(y_test)
 
-n = 500  # データ数
-split_rate = 5  # データ数 / テストデータ数
-data_f = np.linspace(-10.0, 10.0, n)
-data_res_f = list(map(function, data_f))
+X_train = np.array([[0, 0], [1, 0], [0, 1], [1, 1]])
+y_train = np.array([[1, 0], [0, 1], [0, 1], [1, 0]])
+X_test = np.array([[0, 0], [1, 0], [0, 1], [1, 1]])
+y_test = np.array([[1, 0], [0, 1], [0, 1], [1, 0]])
 
-data_u = np.mean(data_f)  # 入力データの平均値
-data_s = np.std(data_f)  # 入力データの標準偏差
-data_res_u = np.mean(data_res_f)  # 入力データに対する正解の出力の平均値
-data_res_s = np.std(data_res_f)  # 入力データに対する正解の出力の標準偏差
-data_train = []
-data_train_res = []
-data_test = []
-data_test_res = []
-data_test_f = []
-data_test_res_f = []
-train_n = 0
-test_n = 0
-
-for i in range(0, n):
-    if i % split_rate == 0:
-        data_test_f.append(data_f[i])
-        data_test_res_f.append(data_res_f[i])
-        data_test.append((data_f[i] - data_u) / data_s)
-        data_test_res.append((data_res_f[i] - data_res_u) / data_res_s)
-        test_n += 1
-    else:
-        data_train.append((data_f[i] - data_u) / data_s)
-        data_train_res.append((data_res_f[i] - data_res_u) / data_res_s)
-        train_n += 1
-data_train = np.array(data_train)
-data_train_res = np.array(data_train_res)
-data_test = np.array(data_test)
-data_test_res = np.array(data_test_res)
-data_test_f = np.array(data_test_f)
-data_test_res_f = np.array(data_test_res_f)
 # 入力データ生成終了
 
 train_n = len(X_train)
@@ -117,7 +87,12 @@ for i in range(1, epoch_num+1):
     lc_validation.append(loss_test)
 
 
+for k in range(0, test_n):
+    out = sce.cal_out(net.forward(X_test[k]))
+    print(out)
+    print(y_test[k])
+
 plt.clf()
-plt.plot(lc_mse_x, lc_mse, color='b', linewidth='1')
+# plt.plot(lc_mse_x, lc_mse, color='b', linewidth='1')
 plt.plot(lc_x, lc_validation, color='y', linestyle="dashed", linewidth='1')
 plt.savefig("per")
