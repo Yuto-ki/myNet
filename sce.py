@@ -19,5 +19,4 @@ class SCE:
         return cee.forward(self.out, t)
 
     def backward(self, t):
-        print(self.out - t)
-        return self.out - t
+        return self.out - t.reshape(-1, 1)
