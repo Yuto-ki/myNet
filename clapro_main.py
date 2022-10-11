@@ -7,8 +7,10 @@ import math
 from outputer import OutPutter
 from net import Net
 from sce import SCE
+from sklearn.datasets import fetch_openml
 from sklearn.datasets import load_wine
 from sklearn.model_selection import train_test_split
+from sklearn import preprocessing
 
 
 def function(x):
@@ -34,16 +36,22 @@ def oh_t_sc(x):
 
 
 lr = 0.1
-shape_data = [13, 3, 3]
-activ_f_data = [1, 0]
+shape_data = [784, 30, 10]
+activ_f_data = [2, 2, 0]
 net = Net(shape_data, activ_f_data, lr)
 
 epoch_num = 1000  # epoch数
-batch_n = 3  # バッチサイズ
+batch_n = 10  # バッチサイズ
 
 # 入力データ生成
-data_wine = load_wine()
-X = data_wine["data"]
+X, y = fetch_openml('mnist_784', version=1, return_X_y=True)
+X = np.array(X)
+lb = preprocessing.LabelBinarizer()
+y = lb.fit_transform(y)
+
+
+# data_wine = load_wine()
+# X = data_wine["data"]
 # X = np.delete(X, 0, axis=1)
 # X = np.delete(X, 0, axis=1)
 # X = np.delete(X, 0, axis=1)
@@ -55,11 +63,12 @@ X = data_wine["data"]
 # X = np.delete(X, 0, axis=1)
 # X = np.delete(X, 1, axis=1)
 # X = np.delete(X, 1, axis=1)
-X = (X - np.mean(X, axis=0)) / np.std(X, axis=0)
-Y = data_wine["target"]
-X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.3, random_state=0)
-y_train = oh(y_train)
-y_test = oh(y_test)
+X = (X - np.mean(X, axis=0)) / 120
+# X = (X - np.mean(X, axis=0)) / np.std(X, axis=0)
+# Y = data_wine["target"]
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=0)
+# y_train = oh(y_train)
+# y_test = oh(y_test)
 
 
 # X_train = np.array([[0, 0], [1, 0], [0, 1], [1, 1]])
