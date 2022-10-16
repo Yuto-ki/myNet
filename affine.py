@@ -4,7 +4,7 @@ import numpy as np
 class Affine:
     def __init__(self, n_in, n_out, lr, init_w_type):  # init_w_type(0:Xavier, 1:He)
         if init_w_type == 0:
-            self.weight = np.random.rand(n_out, n_in) / np.sqrt(n_in)
+            self.weight = np.random.randn(n_out, n_in) / np.sqrt(n_in)
         elif init_w_type == 1:
             self.weight = np.random.randn(n_out, n_in) / np.sqrt(n_in) * np.sqrt(2)
         self.bias = np.zeros((n_out, 1))
