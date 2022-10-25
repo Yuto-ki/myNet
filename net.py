@@ -6,6 +6,8 @@ from swish import Swish
 from softplus import SoftPlus
 from identity import Identity
 from softmax import SoftMax
+from convolution import Convolution
+from max_pooling import MaxPooling
 
 
 def init_w_type(x):
@@ -26,7 +28,8 @@ def init_w_type(x):
 
 
 class Net:
-    def __init__(self, shape_data, activ_f_type, lr):
+    def __init__(self, co_data, shape_data, activ_f_type, lr):
+        # co_data: 畳み込み層の情報()
         # active_f_type: 活性化関数を指定(0: identity, 1:sigmoid, 2: ReLU, 3: tanH, 4: swish, 5: softPlus, 6: softmax)
         # init_w_type: 重みの初期化方法を指定(0:Xavier, 1:He)
         self.layer = []

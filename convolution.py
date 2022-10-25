@@ -42,6 +42,7 @@ class Convolution:
 
     def backward(self, dx):
         grad_out = np.zeros(self.input.shape)
+        dx = dx.reshape(self.output.shape)
         self.grad_b = dx
         a = self.height_in - self.f_size + 1
         b = self.width_in - self.f_size + 1
