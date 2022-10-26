@@ -6,7 +6,7 @@ class MaxPooling:
         self.weight = None
         self.f_size = f_size
         self.input = None
-        self.output = None
+        self.output_shape = None
 
     def forward(self, x):
         self.input = x
@@ -18,15 +18,16 @@ class MaxPooling:
                     tmp = np.argmax(x[i, j*self.f_size:(j+1)*self.f_size, k*self.f_size:(k+1)*self.f_size])
                     self.weight[i, j*self.f_size+int(tmp/2), k*self.f_size+(tmp % 2)] = 1
                     out[:, j, k] = x[i, j*self.f_size+int(tmp/2), k*self.f_size+(tmp % 2)]
-        self.output = out
+        self.output_shape = out.shape
         return out
 
     def backward(self, dx):
+        dx = dx.reshape(self.output_shape)
         dx_rs = np.zeros((len(dx), len(dx[0])*self.f_size, len(dx[0][0])*self.f_size))
         for i in range(0, self.f_size):
             for j in range(0, self.f_size):
                 dx_rs[:, i::self.f_size, j::self.f_size] = dx
         return dx_rs * self.weight
 
-    def update(self):
+    def update(self, batch_n):
         pass

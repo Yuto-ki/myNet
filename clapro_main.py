@@ -11,6 +11,7 @@ from sklearn.datasets import fetch_openml
 # from sklearn.datasets import load_wine
 from sklearn.model_selection import train_test_split
 from sklearn import preprocessing
+import time
 
 
 def function(x):
@@ -46,7 +47,8 @@ batch_n = 10  # バッチサイズ
 
 # 入力データ生成
 X, y = fetch_openml('mnist_784', version=1, return_X_y=True)
-X = np.array(X)
+X = np.array(X).reshape((-1, 1, 28, 28))
+print(X.shape)
 lb = preprocessing.LabelBinarizer()
 y = lb.fit_transform(y)
 
@@ -67,7 +69,7 @@ y = lb.fit_transform(y)
 X = (X - np.mean(X, axis=0)) / 120
 # X = (X - np.mean(X, axis=0)) / np.std(X, axis=0)
 # Y = data_wine["target"]
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=0)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.0001, random_state=0)
 # y_train = oh(y_train)
 # y_test = oh(y_test)
 
@@ -99,6 +101,7 @@ sce = SCE()
 for i in range(1, epoch_num+1):
     lc_mse_x.append(i)
     loss = 0
+    start = time.time()
     for j in range(0, batch_n):
         k = random.randint(0, train_n-1)
         out = sce.cal_out(net.forward(X_train[k]))
@@ -106,13 +109,16 @@ for i in range(1, epoch_num+1):
         net.backward(sce.backward(y_train[k]))
     lc_mse.append(loss)
     net.update(batch_n)
+    print("epoch ", i, " finished, loss: ", loss, ", time: ", time.time() - start)
 
     lc_x.append(i)
     loss_test = 0
     score = 0
     for k in range(0, test_n):
+        start = time.time()
         out = sce.cal_out(net.forward(X_test[k]))
         loss_test += sce.cal_loss(y_test[k]) / test_n
+        print("test ", k, " finished, time: ", time.time() - start)
         if oh_t_sc(out) == oh_t_sc(y_test[k]):
             score += 1
     accuracy.append(score / test_n)

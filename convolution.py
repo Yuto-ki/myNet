@@ -63,7 +63,7 @@ class Convolution:
             for i in range(0, self.height_out):
                 for j in range(0, self.width_out):
                     grad_out[:, i:a + i:self.stride, j:a + j:self.stride] += \
-                        self.filter[d_o] * dx[d_o, i:i + self.f_size, j:j + self.f_size]
+                        self.filter[d_o] * dx[d_o, i, j]
         return grad_out
 
     def update(self, batch_n):
