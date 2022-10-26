@@ -8,7 +8,7 @@ from outputer import OutPutter
 from net import Net
 from sce import SCE
 from sklearn.datasets import fetch_openml
-from sklearn.datasets import load_wine
+# from sklearn.datasets import load_wine
 from sklearn.model_selection import train_test_split
 from sklearn import preprocessing
 
@@ -36,11 +36,12 @@ def oh_t_sc(x):
 
 
 lr = 0.1
-shape_data = [784, 30, 10]
+co_data = [[0, 5, 16, 1], [2], [1, 2], [0, 5, 8, 1], [2], [1, 2]]
+shape_data = [128, 30, 10]
 activ_f_data = [2, 2, 0]
-net = Net(shape_data, activ_f_data, lr)
+net = Net(co_data, shape_data, activ_f_data, lr)
 
-epoch_num = 1000  # epoch数
+epoch_num = 2  # epoch数
 batch_n = 10  # バッチサイズ
 
 # 入力データ生成

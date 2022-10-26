@@ -2,31 +2,37 @@ import numpy as np
 
 
 class Convolution:
-    def __init__(self, f_size, depth_in, depth_out, stride):
-        self.lr = 0.1
+    def __init__(self, f_size, depth_out, stride):
+        self.lr = 0.1  # 初期化出来るように要変更
         self.f_size = f_size
-        self.depth_in = depth_in
+        self.depth_in = 0
         self.depth_out = depth_out
         self.height_in = None
         self.width_in = None
         self.stride = stride
         self.height_out = 0
         self.width_out = 0
-        self.filter = np.array([[np.random.randn(f_size, f_size)
-                                 for _ in range(0, depth_in)] for _ in range(0, depth_out)])
+        self.filter = None
         self.bias = None
-        self.grad_f = np.zeros(self.filter.shape)
+        self.grad_f = None
         self.grad_b = None
         self.input = None
         self.output = None
 
     def forward(self, x):
+        # 入力依存のメンバ変数を指定
+        self.depth_in = len(x)
+        self.filter = np.array([[np.random.randn(self.f_size, self.f_size) for _ in range(0, self.depth_in)]
+                                for _ in range(0, self.depth_out)])
+        self.grad_f = np.zeros(self.filter.shape)
         self.height_in = len(x[0])
         self.width_in = len(x[0][0])
         self.height_out = int((self.height_in - self.f_size) / self.stride + 1)
         self.width_out = int((self.width_in - self.f_size) / self.stride + 1)
         self.bias = np.zeros((self.depth_out, self.height_out, self.width_out))
         self.grad_b = np.zeros(self.bias.shape)
+
+        # forwardのmain
         self.input = x
         self.output = np.zeros((self.depth_out, self.height_out, self.width_out))
         for i1 in range(0, self.depth_out):

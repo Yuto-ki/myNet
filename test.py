@@ -41,7 +41,7 @@ a = np.array([
         [6, 7, 8, 9, 10, 11, 7]
     ]
 ])
-co = Convolution(2, 4, 6, 1)
+co = Convolution(2, 6, 1)
 mp = MaxPooling(2)
 print(mp.forward(co.forward(a)))
 co.backward(mp.backward(mp.output))
