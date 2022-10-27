@@ -39,16 +39,15 @@ def oh_t_sc(x):
 lr = 0.1
 co_data = [[0, 5, 16, 1], [2], [1, 2], [0, 5, 8, 1], [2], [1, 2]]
 shape_data = [128, 30, 10]
-activ_f_data = [2, 2, 0]
+activ_f_data = [1, 1, 0]
 net = Net(co_data, shape_data, activ_f_data, lr)
 
-epoch_num = 2  # epoch数
+epoch_num = 10  # epoch数
 batch_n = 10  # バッチサイズ
 
 # 入力データ生成
 X, y = fetch_openml('mnist_784', version=1, return_X_y=True)
 X = np.array(X).reshape((-1, 1, 28, 28))
-print(X.shape)
 lb = preprocessing.LabelBinarizer()
 y = lb.fit_transform(y)
 
@@ -69,8 +68,7 @@ y = lb.fit_transform(y)
 X = (X - np.mean(X, axis=0)) / 120
 # X = (X - np.mean(X, axis=0)) / np.std(X, axis=0)
 # Y = data_wine["target"]
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.0001, random_state=0)
-print(X[0].tolist())
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.0005, random_state=0)
 # y_train = oh(y_train)
 # y_test = oh(y_test)
 
@@ -119,7 +117,7 @@ for i in range(1, epoch_num+1):
         start = time.time()
         out = sce.cal_out(net.forward(X_test[k]))
         loss_test += sce.cal_loss(y_test[k]) / test_n
-        print("test ", k, " finished, time: ", time.time() - start)
+        # print("test ", k, " finished, time: ", time.time() - start)
         if oh_t_sc(out) == oh_t_sc(y_test[k]):
             score += 1
     accuracy.append(score / test_n)

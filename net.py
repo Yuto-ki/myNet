@@ -6,7 +6,7 @@ from swish import Swish
 from softplus import SoftPlus
 from identity import Identity
 from softmax import SoftMax
-from convolution import Convolution
+from convolution2 import Convolution
 from max_pooling import MaxPooling
 
 
