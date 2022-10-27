@@ -70,6 +70,7 @@ X = (X - np.mean(X, axis=0)) / 120
 # X = (X - np.mean(X, axis=0)) / np.std(X, axis=0)
 # Y = data_wine["target"]
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.0001, random_state=0)
+print(X[0].tolist())
 # y_train = oh(y_train)
 # y_test = oh(y_test)
 

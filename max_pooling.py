@@ -7,6 +7,7 @@ class MaxPooling:
         self.f_size = f_size
         self.input = None
         self.output_shape = None
+        self.output = None  # 実際には不要
 
     def forward(self, x):
         self.input = x
@@ -19,6 +20,7 @@ class MaxPooling:
                     self.weight[i, j*self.f_size+int(tmp/2), k*self.f_size+(tmp % 2)] = 1
                     out[:, j, k] = x[i, j*self.f_size+int(tmp/2), k*self.f_size+(tmp % 2)]
         self.output_shape = out.shape
+        self.output = out  # 実際には不要
         return out
 
     def backward(self, dx):
