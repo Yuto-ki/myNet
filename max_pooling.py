@@ -9,6 +9,20 @@ class MaxPooling:
         self.output_shape = None
         self.output = None  # 実際には不要
 
+    def make_shape(self, x):
+        self.input = x
+        self.weight = np.zeros(x.shape)
+        out = np.zeros((len(x), int(len(x[0]) / self.f_size), int(len(x[0][0]) / self.f_size)))
+        for i in range(len(x)):
+            for j in range(int(len(x[0]) / self.f_size)):
+                for k in range(int(len(x[0][0]) / self.f_size)):
+                    tmp = np.argmax(x[i, j * self.f_size:(j + 1) * self.f_size, k * self.f_size:(k + 1) * self.f_size])
+                    self.weight[i, j * self.f_size + int(tmp / 2), k * self.f_size + (tmp % 2)] = 1
+                    out[:, j, k] = x[i, j * self.f_size + int(tmp / 2), k * self.f_size + (tmp % 2)]
+        self.output_shape = out.shape
+        self.output = out  # 実際には不要
+        return out
+
     def forward(self, x):
         self.input = x
         self.weight = np.zeros(x.shape)

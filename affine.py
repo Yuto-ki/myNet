@@ -13,6 +13,10 @@ class Affine:
         self.grad_b = np.zeros(self.bias.shape)
         self.lr = lr  # 学習率
 
+    def make_shape(self, x):
+        self.inputs = x.reshape(-1, 1)
+        return np.dot(self.weight, self.inputs) + self.bias
+
     def forward(self, x):
         self.inputs = x.reshape(-1, 1)
         return np.dot(self.weight, self.inputs) + self.bias

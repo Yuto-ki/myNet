@@ -1,5 +1,5 @@
 import numpy as np
-from convolution import Convolution as Convolution1
+from convolution3 import Convolution as Convolution1
 from convolution2 import Convolution as Convolution2
 from max_pooling import MaxPooling
 import time
@@ -11,6 +11,8 @@ co1 = Convolution1(5, 16, 1)
 mp1 = MaxPooling(2)
 co2 = Convolution2(5, 16, 1)
 mp2 = MaxPooling(2)
+co1.make_shape(a)
+co2.make_shape(a)
 forward_time1 = 0
 backward_time1 = 0
 total_time1 = 0
@@ -48,10 +50,10 @@ for i in range(10):
     forward_time2 += start2 - start1
     backward_time2 += time.time() - start2
     total_time2 += time.time() - start1
-print("co forward time ver1: ", '{:.5f}'.format(cof_time1 / 10), " ver2: ", '{:.5f}'.format(cof_time2 / 10))
-print("mp forward time ver1: ", '{:.5f}'.format(mpf_time1 / 10), " ver2: ", '{:.5f}'.format(mpf_time2 / 10))
-print("forward    time ver1: ", '{:.5f}'.format(forward_time1 / 10), " ver2: ", '{:.5f}'.format(forward_time2 / 10))
-print("backward   time ver1: ", '{:.5f}'.format(backward_time1 / 10), " ver2: ", '{:.5f}'.format(backward_time2 / 10))
-print("total      time ver1: ", '{:.5f}'.format(total_time1 / 10), " ver2: ", '{:.5f}'.format(total_time2 / 10))
+print("co forward time ver3: ", '{:.5f}'.format(cof_time1 / 10), " ver2: ", '{:.5f}'.format(cof_time2 / 10))
+print("mp forward time ver3: ", '{:.5f}'.format(mpf_time1 / 10), " ver2: ", '{:.5f}'.format(mpf_time2 / 10))
+print("forward    time ver3: ", '{:.5f}'.format(forward_time1 / 10), " ver2: ", '{:.5f}'.format(forward_time2 / 10))
+print("backward   time ver3: ", '{:.5f}'.format(backward_time1 / 10), " ver2: ", '{:.5f}'.format(backward_time2 / 10))
+print("total      time ver3: ", '{:.5f}'.format(total_time1 / 10), " ver2: ", '{:.5f}'.format(total_time2 / 10))
 
 

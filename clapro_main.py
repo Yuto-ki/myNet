@@ -38,11 +38,11 @@ def oh_t_sc(x):
 
 lr = 0.1
 co_data = [[0, 5, 16, 1], [2], [1, 2], [0, 5, 8, 1], [2], [1, 2]]
-shape_data = [128, 30, 10]
-activ_f_data = [1, 1, 0]
+shape_data = [128, 10]
+activ_f_data = [2, 2, 0]
 net = Net(co_data, shape_data, activ_f_data, lr)
 
-epoch_num = 10  # epoch数
+epoch_num = 1000  # epoch数
 batch_n = 10  # バッチサイズ
 
 # 入力データ生成
@@ -68,7 +68,7 @@ y = lb.fit_transform(y)
 X = (X - np.mean(X, axis=0)) / 120
 # X = (X - np.mean(X, axis=0)) / np.std(X, axis=0)
 # Y = data_wine["target"]
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.0005, random_state=0)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.0002, random_state=0)
 # y_train = oh(y_train)
 # y_test = oh(y_test)
 
@@ -83,12 +83,6 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.0005, rand
 train_n = len(X_train)
 test_n = len(X_test)
 
-show_per_n = 2
-test_deter = show_per_n
-graph_n = math.floor(math.log2(epoch_num)) + 1
-oup = OutPutter(graph_n, 'result (n : number of train)')
-fig_count = 0
-
 lc_mse_x = []
 lc_mse = []
 lc_x = []
@@ -96,6 +90,7 @@ lc_validation = []
 accuracy = []
 
 sce = SCE()
+net.make_shape(X_train[0])
 
 for i in range(1, epoch_num+1):
     lc_mse_x.append(i)
@@ -108,20 +103,18 @@ for i in range(1, epoch_num+1):
         net.backward(sce.backward(y_train[k]))
     lc_mse.append(loss)
     net.update(batch_n)
-    print("epoch ", i, " finished, loss: ", loss, ", time: ", time.time() - start)
 
     lc_x.append(i)
     loss_test = 0
     score = 0
     for k in range(0, test_n):
-        start = time.time()
         out = sce.cal_out(net.forward(X_test[k]))
         loss_test += sce.cal_loss(y_test[k]) / test_n
-        # print("test ", k, " finished, time: ", time.time() - start)
         if oh_t_sc(out) == oh_t_sc(y_test[k]):
             score += 1
     accuracy.append(score / test_n)
     lc_validation.append(loss_test)
+    print("epoch ", i, " finished, acc: ", score / test_n, ", time: ", time.time() - start)
 
 
 for k in range(0, test_n):

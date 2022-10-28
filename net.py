@@ -64,6 +64,13 @@ class Net:
             elif activ_f_type[i] == 6:
                 self.layer.append(SoftMax())
 
+    def make_shape(self, inputs):
+        a = inputs
+        for i in self.layer:
+            a = i.make_shape(a)
+        self.out = a
+        return self.out
+
     def forward(self, inputs):
         a = inputs
         for i in self.layer:

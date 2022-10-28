@@ -5,6 +5,10 @@ class ReLU:
     def __init__(self):
         self.inputs = None
 
+    def make_shape(self, x):
+        self.inputs = x
+        return x * (x > 0)
+
     def forward(self, x):
         self.inputs = x
         return x * (x > 0)
