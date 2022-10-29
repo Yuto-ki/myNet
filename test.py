@@ -13,25 +13,14 @@ co2 = Convolution2(5, 16, 1)
 mp2 = MaxPooling(2)
 co1.make_shape(a)
 co2.make_shape(a)
+co1.filter = co2.filter.copy()
+ba1 = None
+ba2 = None
 forward_time1 = 0
 backward_time1 = 0
 total_time1 = 0
 cof_time1 = 0
 mpf_time1 = 0
-for i in range(10):
-    start1 = time.time()
-    b = co1.forward(a)
-    time1 = time.time()
-    mp1.forward(b)
-    start2 = time.time()
-    co1.backward(mp1.backward(mp1.output))
-    co1.update(1)
-    cof_time1 += time1 - start1
-    mpf_time1 += start2 - time1
-    forward_time1 += start2 - start1
-    backward_time1 += time.time() - start2
-    total_time1 += time.time() - start1
-
 forward_time2 = 0
 backward_time2 = 0
 total_time2 = 0
@@ -39,21 +28,35 @@ cof_time2 = 0
 mpf_time2 = 0
 for i in range(10):
     start1 = time.time()
+    b = co1.forward(a)
+    time1 = time.time()
+    mp1.forward(b)
+    start2 = time.time()
+    ba1 = co1.backward(mp1.backward(mp1.output))
+    co1.update(1)
+    cof_time1 += time1 - start1
+    mpf_time1 += start2 - time1
+    forward_time1 += start2 - start1
+    backward_time1 += time.time() - start2
+    total_time1 += time.time() - start1
+
+    start1 = time.time()
     b = co2.forward(a)
     time1 = time.time()
     mp2.forward(b)
     start2 = time.time()
-    co2.backward(mp2.backward(mp2.output))
+    ba2 = co2.backward(mp2.backward(mp2.output))
     co2.update(1)
     cof_time2 += time1 - start1
     mpf_time2 += start2 - time1
     forward_time2 += start2 - start1
     backward_time2 += time.time() - start2
     total_time2 += time.time() - start1
+print(np.sum(co1.output - co2.output))
 print("co forward time ver3: ", '{:.5f}'.format(cof_time1 / 10), " ver2: ", '{:.5f}'.format(cof_time2 / 10))
 print("mp forward time ver3: ", '{:.5f}'.format(mpf_time1 / 10), " ver2: ", '{:.5f}'.format(mpf_time2 / 10))
 print("forward    time ver3: ", '{:.5f}'.format(forward_time1 / 10), " ver2: ", '{:.5f}'.format(forward_time2 / 10))
 print("backward   time ver3: ", '{:.5f}'.format(backward_time1 / 10), " ver2: ", '{:.5f}'.format(backward_time2 / 10))
 print("total      time ver3: ", '{:.5f}'.format(total_time1 / 10), " ver2: ", '{:.5f}'.format(total_time2 / 10))
 
-
+print(list(zip(range(6), range(5))))

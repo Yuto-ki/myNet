@@ -3,7 +3,7 @@ import numpy as np
 
 class Convolution:
     def __init__(self, f_size, depth_out, stride):
-        self.lr = 0.1  # 初期化出来るように要変更
+        self.lr = 0.1
         self.f_size = f_size
         self.depth_in = 0
         self.depth_out = depth_out
@@ -35,12 +35,6 @@ class Convolution:
         # forwardのmain
         self.input = x
         self.output = np.zeros((self.depth_out, self.height_out, self.width_out))
-        for i2 in range(0, self.height_out):
-            for i3 in range(0, self.width_out):
-                self.output[:, i2, i3] += np.sum(np.sum(np.sum(x[:, i2 * self.stride:i2 * self.stride + self.f_size,
-                                                               i3 * self.stride:i3 * self.stride + self.f_size] * self.filter,
-                                                               axis=3), axis=2), axis=1)
-        self.output += self.bias
         return self.output
 
     def forward(self, x):

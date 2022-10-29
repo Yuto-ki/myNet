@@ -35,12 +35,6 @@ class Convolution:
         # forwardのmain
         self.input = x
         self.output = np.zeros((self.depth_out, self.height_out, self.width_out))
-        for i2 in range(0, self.height_out):
-            for i3 in range(0, self.width_out):
-                self.output[:, i2, i3] += np.sum(np.sum(np.sum(x[:, i2 * self.stride:i2 * self.stride + self.f_size,
-                                                               i3 * self.stride:i3 * self.stride + self.f_size] * self.filter,
-                                                               axis=3), axis=2), axis=1)
-        self.output += self.bias
         return self.output
 
     def forward(self, x):
@@ -48,10 +42,10 @@ class Convolution:
         self.output = np.zeros((self.depth_out, self.height_out, self.width_out))
         for i2 in range(self.height_out):
             for i3 in range(self.width_out):
-                self.output[:, i2, i3] += np.sum(np.sum(np.sum(x[:, i2*self.stride:i2*self.stride+self.f_size, i3*self.stride:i3*self.stride+self.f_size] * self.filter, axis=3), axis=2), axis=1)
+                self.output[:, i2, i3] = np.sum(np.sum(np.sum(x[:, i2 * self.stride:i2 * self.stride + self.f_size,
+                                                               i3 * self.stride:i3 * self.stride + self.f_size] * self.filter,
+                                                               axis=3), axis=2), axis=1)
         self.output += self.bias
-        cc = np.array([np.sum(np.sum(np.sum(x[:, i2*self.stride:i2*self.stride+self.f_size, i3*self.stride:i3*self.stride+self.f_size] * self.filter, axis=3), axis=2), axis=1) for (i2, i3) in zip(range(self.height_out), range(self.width_out))])
-        print(cc.shape)
         return self.output
 
     def backward(self, dx):
@@ -62,7 +56,7 @@ class Convolution:
         for i in range(0, self.f_size):
             for j in range(0, self.f_size):
                 self.grad_f[:, :, i, j] += \
-                    np.sum(np.sum(self.input[:, i:a+i:self.stride, j:b+j:self.stride] * dx, axis=3), axis=2)
+                    np.sum(np.sum(self.input[:, i:a + i:self.stride, j:b + j:self.stride] * dx, axis=3), axis=2)
         a = self.f_size * self.stride
         dx = dx.reshape(self.output.shape)
         self.grad_b += dx
@@ -71,6 +65,9 @@ class Convolution:
                 for j in range(0, self.width_out):
                     grad_out[:, i:a + i:self.stride, j:a + j:self.stride] += \
                         self.filter[d_o] * dx[d_o, i, j]
+        # for d_o, i, j in zip(range(self.depth_out), range(self.height_out), range(self.width_out)):
+        #     grad_out[:, i:a + i:self.stride, j:a + j:self.stride] += \
+        #         self.filter[d_o] * dx[d_o, i, j]
         return grad_out
 
     def update(self, batch_n):
