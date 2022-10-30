@@ -1,4 +1,9 @@
 class Identity:
+
+    @staticmethod
+    def make_shape(x):
+        return x
+
     @staticmethod
     def forward(x):
         return x
