@@ -6,8 +6,9 @@ from swish import Swish
 from softplus import SoftPlus
 from identity import Identity
 from softmax import SoftMax
-from convolution2 import Convolution
+from convolution3 import Convolution
 from max_pooling import MaxPooling
+import numpy as np
 
 
 def init_w_type(x):
@@ -40,11 +41,13 @@ class Net:
         # Convolutionとpooling層, 活性化層をlayerに追加
         for i in co_data:
             if i[0] == 0:
-                self.layer.append(Convolution(i[1], i[2], i[3]))
+                self.layer.append(Convolution(i[1], i[2], i[3], i[4]))
             elif i[0] == 1:
                 self.layer.append(MaxPooling(i[1]))
             elif i[0] == 2:
                 self.layer.append(ReLU())
+            elif i[0] == 3:
+                self.layer.append(Sigmoid())
 
         # Affineと活性化層をlayerに追加
         for i in range(0, len(shape_data)-1):

@@ -2,8 +2,8 @@ import numpy as np
 
 
 class Convolution:
-    def __init__(self, f_size, depth_out, stride):
-        self.lr = 0.1
+    def __init__(self, f_size, depth_out, stride, lr):
+        self.lr = lr
         self.f_size = f_size
         self.depth_in = 0
         self.depth_out = depth_out
@@ -23,7 +23,7 @@ class Convolution:
         # 入力依存のメンバ変数を指定 __init__に移行する必要あり
         self.depth_in = len(x)
         self.filter = np.array([[np.random.randn(self.f_size, self.f_size) for _ in range(0, self.depth_in)]
-                                for _ in range(0, self.depth_out)]) / (self.f_size**2 * self.depth_in)
+                                for _ in range(0, self.depth_out)]) / (self.f_size**2 * self.depth_in * self.depth_out)
         self.grad_f = np.zeros(self.filter.shape)
         self.height_in = len(x[0])
         self.width_in = len(x[0][0])

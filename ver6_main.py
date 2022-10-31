@@ -16,7 +16,7 @@ def function(x):
 lr = 0.1
 shape_data = [1, 20, 20, 1]
 activ_f_data = [2, 2, 0]
-net = Net(shape_data, activ_f_data, lr)
+net = Net([], shape_data, activ_f_data, lr)
 
 epoch_num = 100  # epoch数
 batch_n = 10  # バッチサイズ

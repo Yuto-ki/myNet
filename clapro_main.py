@@ -36,13 +36,13 @@ def oh_t_sc(x):
     return np.argmax(x)
 
 
-lr = 0.1
-co_data = [[0, 5, 16, 1], [2], [1, 2], [0, 5, 8, 1], [2], [1, 2]]
-shape_data = [128, 10]
-activ_f_data = [2, 2, 0]
+lr = 0.001
+co_data = [[0, 5, 20, 1, lr], [2], [1, 2], [0, 5, 12, 1, lr], [2], [1, 2]]
+shape_data = [16*12, 10]
+activ_f_data = [0]
 net = Net(co_data, shape_data, activ_f_data, lr)
 
-epoch_num = 1000  # epoch数
+epoch_num = 4000  # epoch数
 batch_n = 10  # バッチサイズ
 
 # 入力データ生成
@@ -65,10 +65,11 @@ y = lb.fit_transform(y)
 # X = np.delete(X, 0, axis=1)
 # X = np.delete(X, 1, axis=1)
 # X = np.delete(X, 1, axis=1)
-X = (X - np.mean(X, axis=0)) / 120
+# X = (X - np.mean(X, axis=0)) / 1
 # X = (X - np.mean(X, axis=0)) / np.std(X, axis=0)
+X = X / 16
 # Y = data_wine["target"]
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.0002, random_state=0)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.01, random_state=0)
 # y_train = oh(y_train)
 # y_test = oh(y_test)
 
@@ -115,6 +116,9 @@ for i in range(1, epoch_num+1):
     accuracy.append(score / test_n)
     lc_validation.append(loss_test)
     print("epoch ", i, " finished, acc: ", score / test_n, ", time: ", time.time() - start)
+    out = sce.cal_out(net.forward(X_test[0]))
+    print(out.reshape(1, -1))
+    print(y_test[0].reshape(1, -1))
 
 
 for k in range(0, test_n):
