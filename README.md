@@ -1,6 +1,6 @@
 ・実行方法
 ver6_main.pyを実行する
-（変数shape_data, activ_f_dataにより各層の設定可能 ）
+（変数shape_data, activ_f_dataにより各層の設定、epoch_numにより学習回数設定を行う）
 
 ・概要
 ver6_main.py内のfunction関数（１変数関数）をニューラルネットワークにより近似するプログラム
